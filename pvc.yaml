@@ -1,3 +1,4 @@
+# PersistentVolumeClaim is enough in most cases.
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -11,7 +12,7 @@ spec:
   capacity:
     storage: 100Mi
   hostPath:
-    path: /Users/moon/Desktop/dev/exp/k8s
+    path: /path/to/your/directory
 
 ---
 
@@ -28,7 +29,9 @@ spec:
   resources:
     requests:
       storage: 100Mi
-  volumeName: tutorial-pv
+  # This won't be necessary unless you need to specify
+  # a certain PersistentVolume.
+  volumeName: tutorial-pv 
 
 ---
 
