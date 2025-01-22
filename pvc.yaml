@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: tutorial-pv
+  labels:
+    app: tutorial-pv
+spec:
+  storageClassName: hostpath
+  accessModes:
+  - ReadWriteMany
+  capacity:
+    storage: 100Mi
+  hostPath:
+    path: /Users/moon/Desktop/dev/exp/k8s
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tutorial-pvc
+  labels:
+    app: tutorial-pvc
+spec:
+  storageClassName: hostpath
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Mi
+  volumeName: tutorial-pv
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: tutorial-pod
+  labels:
+    app: tutorial-pod
+spec:
+  volumes:
+  - name: tutorial-vol
+    persistentVolumeClaim:
+      claimName: tutorial-pvc
+      readOnly: true
+  containers:
+    - name: tutorial-container
+      image: caddy
+      volumeMounts:
+      - name: tutorial-vol
+        mountPath: /work
+      workingDir: /work
+      command: [
+        "caddy",
+        "file-server",
+        "--browse",
+        "--listen",
+        "0.0.0.0:8080",
+      ]
+  terminationGracePeriodSeconds: 1

@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: tutorial-pod
+  labels:
+     app: tutorial-pod
+spec:
+  containers:
+    - name: tutorial-container
+      image: caddy
+      workingDir: /etc
+      env:
+      - name: FOO
+        value: FOOFOO
+      command: [
+        "caddy",
+        "file-server",
+        "--browse",
+        "--listen",
+        "0.0.0.0:8080",
+      ]
+    - name: another-container
+      image: caddy
+      workingDir: /bin
+      env:
+      - name: BAR
+        value: BARBAR
+      command: [
+        "caddy",
+        "file-server",
+        "--browse",
+        "--listen",
+        "0.0.0.0:8080",
+      ]
+  terminationGracePeriodSeconds: 1
