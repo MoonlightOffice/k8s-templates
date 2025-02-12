@@ -61,6 +61,7 @@ kubectl exec -ti <pod-name> -c <container-name> -- sh
 Work with yaml files
 ```shell
 kubectl apply -f example.yaml
+kubectl apply -f example/ -R
 kubectl delete -f example.yaml
 
 # Specify namespace
@@ -72,16 +73,28 @@ kubectl delete -f example.yaml -n <namespace>
 
 Pod's DNS pattern is as follows:
 ```shell
-<pod-name>.<service-name>.<namespace>.svc.cluster.local
+# Pods with ordinary service
+<service-name>.<namespace>.svc.cluster.local
+
+# Pods with StatefulSets
+<pod-name>.<headless-service-name>.<namespace>.svc.cluster.local
 ```
 
-For example, if a pod is trying to access another pod named "server," with the service name "lb" and located in the "default" namespace, it can reach the pod using the following domain name:
+For example, if a pod is trying to access another pod named "server" with the service name "lb" and located in the "default" namespace, it can reach the pod using the following domain name:
 ```shell
+# Pods with ordinary service
+lb.default.svc.cluster.local
+
+# Pods with StatefulSets
 server.lb.default.svc.cluster.local
 ```
 
 If both pods are in the same namespace, the DNS can be shortened to:
 
 ```shell
+# Pods with ordinary service
+lb
+
+# Pods with StatefulSets
 server.lb
 ```
