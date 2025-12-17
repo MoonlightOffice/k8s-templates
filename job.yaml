@@ -3,6 +3,7 @@ kind: Job
 metadata:
   name: tutorial-job
 spec:
+  ttlSecondsAfterFinished: 20
   template:
     spec:
       containers:
